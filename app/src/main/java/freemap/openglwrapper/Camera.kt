@@ -2,9 +2,9 @@ package freemap.openglwrapper
 
 data class Point(var x: Float=0.0f, var y: Float=0.0f, var z: Float=0.0f)
 
-class Camera {
+class Camera(dx: Float=0.0f, dy: Float=0.0f, dz: Float=0.0f) {
     var rotation = 0.0f
-    var position = Point()
+    var position = Point(dx, dy, dz)
 
     fun rotate(degrees: Float) {
         rotation += degrees
