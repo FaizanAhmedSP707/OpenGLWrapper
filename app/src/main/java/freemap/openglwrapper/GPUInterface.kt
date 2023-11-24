@@ -72,7 +72,7 @@ class GPUInterface(val id: String="DefaultGPUInterface")  {
         if (valid) {
             specifyBufferedDataFormat(attrVarRef, vertices, stride)
             indices.position(startOfIndicesInBuffer)
-            GLES20.glDrawElements(mode, indices.limit(), GLES20.GL_UNSIGNED_SHORT, indices)
+            drawElements(indices, mode)
         }
     }
 
@@ -82,6 +82,9 @@ class GPUInterface(val id: String="DefaultGPUInterface")  {
         GLES20.glVertexAttribPointer(attrVarRef, valuesPerVertex, GLES20.GL_FLOAT, false, stride, vertices)
     }
 
+    fun drawElements(indices: Buffer, mode: Int = GLES20.GL_TRIANGLES) {
+        GLES20.glDrawElements(mode, indices.limit(), GLES20.GL_UNSIGNED_SHORT, indices)
+    }
     fun getAttribLocation(shaderVar: String): Int {
         return if (valid) GLES20.glGetAttribLocation(shaderProgram, shaderVar) else -1
     }
