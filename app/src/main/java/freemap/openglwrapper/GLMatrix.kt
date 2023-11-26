@@ -2,13 +2,10 @@ package freemap.openglwrapper
 
 import android.opengl.Matrix
 
-class GLMatrix {
-    val values = FloatArray(16)
+class GLMatrix(val values: FloatArray = floatArrayOf(1f,0f,0f,0f,0f,1f,0f,0f,0f,0f,1f,0f,0f,0f,0f,1f)) {
+
     val axes = mapOf('x' to floatArrayOf(1.0f, 0.0f, 0.0f), 'y' to floatArrayOf(0.0f, 1.0f, 0.0f), 'z' to floatArrayOf(0.0f, 0.0f, 1.0f))
 
-    init {
-        setAsIdentityMatrix()
-    }
 
     fun setAsIdentityMatrix() {
         Matrix.setIdentityM(values, 0)
@@ -36,5 +33,30 @@ class GLMatrix {
 
     fun rotateAboutY(angle: Float) {
         rotate(angle, 1.0f, 0.0f, 0.0f)
+    }
+
+    fun correctSensorMatrix() {
+        val correctionMatrix = GLMatrix(floatArrayOf(
+            1f, 0f, 0f, 0f,
+            0f, 0f, 1f, 0f,
+            0f, -1f, 0f, 0f,
+            0f, 0f, 0f, 1f
+        ))
+
+        multiply(correctionMatrix)
+    }
+
+    fun multiply(right: GLMatrix) {
+        Matrix.multiplyMM(values, 0, values.clone(), 0, right.values, 0)
+    }
+
+    fun clone() : GLMatrix {
+        return GLMatrix(values.clone())
+    }
+
+    fun multiply(vec: FloatArray) : FloatArray {
+        val result = vec.clone()
+        Matrix.multiplyMV(result, 0, values, 0, vec, 0)
+        return result
     }
 }
