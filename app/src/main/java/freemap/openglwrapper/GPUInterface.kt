@@ -1,7 +1,11 @@
 package freemap.openglwrapper
 
 import android.content.res.AssetManager
+import android.graphics.BitmapFactory
+import android.graphics.SurfaceTexture
+import android.opengl.GLES11Ext.GL_TEXTURE_EXTERNAL_OES
 import android.opengl.GLES20
+import android.opengl.GLUtils
 import android.util.Log
 
 import java.nio.Buffer
@@ -111,7 +115,7 @@ class GPUInterface(val id: String="DefaultGPUInterface")  {
         }
     }
 
-    // could be used e.g. for sending texture wayId
+    // could be used e.g. for sending texture id
     fun setUniformInt(refShaderVar: Int, i: Int) {
         if (valid) {
             GLES20.glUniform1i(refShaderVar, i)
@@ -188,6 +192,7 @@ class GPUInterface(val id: String="DefaultGPUInterface")  {
         GLES20.glUseProgram(shaderProgram)
         return shaderProgram
     }
+
 
     private fun errorCheck(location: String) {
         val i = GLES20.glGetError()
